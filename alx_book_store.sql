@@ -50,7 +50,7 @@ CREATE TABLE Order_Details (
   quantity DOUBLE NOT NULL,
   PRIMARY KEY (orderdetailid),
   CONSTRAINT fk_orderdetails_order
-    FOREIGN KEY (order_id) REFERENCES ORDERS(order_id)
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
       ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk_orderdetails_book
     FOREIGN KEY (book_id) REFERENCES Books(book_id)
