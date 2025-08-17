@@ -41,9 +41,10 @@ def main():
         # Success message (no SELECT/SHOW used)
         print("Database 'alx_book_store' created successfully!")
 
-    except Error as e:
-        # Print a clean error message on failure
-        print(f"Failed to connect or create database: {e}")
+    
+    except mysql.connector.Error as e:
+        print(f"Failed to connect to MySQL server: {e}")
+
         sys.exit(1)
 
     finally:
