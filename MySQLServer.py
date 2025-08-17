@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-"""
-MySQLServer.py
-Creates the database `alx_book_store` on a MySQL server.
-- Prints a success message when created (or already present).
-- Does NOT use SELECT or SHOW.
-- Handles connection errors.
-- Opens and closes the DB connection safely.
-"""
-
 import sys
 import argparse
 from getpass import getpass
@@ -35,12 +25,14 @@ def main():
     cursor = None
     try:
         # Connect WITHOUT specifying a database
-        conn = mysql.connect(
+        
+        conn = mysql.connector.connect(
             host=args.host,
             port=args.port,
             user=args.user,
             password=password,
         )
+
 
         # Create cursor and run DDL
         cursor = conn.cursor()
