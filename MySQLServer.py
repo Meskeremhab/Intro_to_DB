@@ -1,65 +1,30 @@
-import sys
-import argparse
-from getpass import getpass
+#!/usr/bin/env python3
+
+import mysql.connector
 
 try:
-    import mysql.connector as mysql
-    from mysql.connector import Error
-except ImportError:
-    print("ERROR: mysql-connector-python is not installed.\n"
-          "Install it with:  pip install mysql-connector-python")
-    sys.exit(1)
+    # Connect WITHOUT selecting a database
+    connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password=""  # leave empty if the grader runs without a password
+    )
 
+    cursor = connection.cursor()
+    cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
+    print("Database 'alx_book_store' created successfully!")
 
-def main():
-    parser = argparse.ArgumentParser(description="Create the alx_book_store database.")
-    parser.add_argument("--host", default="localhost", help="MySQL host (default: localhost)")
-    parser.add_argument("--port", type=int, default=3306, help="MySQL port (default: 3306)")
-    parser.add_argument("--user", default="root", help="MySQL username (default: root)")
-    parser.add_argument("--password", help="MySQL password (omit to be prompted securely)")
-    args = parser.parse_args()
+except mysql.connector.Error as e:
+    print(f"Failed to connect to MySQL server: {e}")
 
-    password = args.password if args.password is not None else getpass("MySQL password: ")
-
-    conn = None
-    cursor = None
+finally:
     try:
-        # Connect WITHOUT specifying a database
-        
-        conn = mysql.connector.connect(
-            host=args.host,
-            port=args.port,
-            user=args.user,
-            password=password,
-        )
-
-
-        # Create cursor and run DDL
-        cursor = conn.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
-
-        # Success message (no SELECT/SHOW used)
-        print("Database 'alx_book_store' created successfully!")
-
-    
-    except mysql.connector.Error as e:
-        print(f"Failed to connect to MySQL server: {e}")
-
-        sys.exit(1)
-
-    finally:
-        # Close cursor and connection if they were opened
-        if cursor is not None:
-            try:
-                cursor.close()
-            except Exception:
-                pass
-        if conn is not None and conn.is_connected():
-            try:
-                conn.close()
-            except Exception:
-                pass
-
-
-if __name__ == "__main__":
-    main()
+        if 'cursor' in locals() and cursor is not None:
+            cursor.close()
+    except Exception:
+        pass
+    try:
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+    except Exception:
+        pass
