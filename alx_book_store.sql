@@ -3,14 +3,14 @@ CREATE DATABASE IF NOT EXISTS alx_book_store CHARACTER SET UTF8MB4 COLLATE UTF8M
 USE alx_book_store;
 
 -- AUTHORS
-CREATE TABLE AUTHORS (
+CREATE TABLE Authors (
   author_id INT NOT NULL AUTO_INCREMENT,
   author_name VARCHAR(215) NOT NULL,
   PRIMARY KEY (author_id)
 ) ENGINE=INNODB;
 
 -- BOOKS
-CREATE TABLE BOOKS (
+CREATE TABLE Books (
   book_id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(130) NOT NULL,
   author_id INT NOT NULL,
@@ -18,12 +18,12 @@ CREATE TABLE BOOKS (
   publication_date DATE,
   PRIMARY KEY (book_id),
   CONSTRAINT fk_books_author
-    FOREIGN KEY (author_id) REFERENCES AUTHORS(author_id)
+    FOREIGN KEY (author_id) REFERENCES Authors(author_id)
       ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE=INNODB;
 
 -- CUSTOMERS
-CREATE TABLE CUSTOMERS (
+CREATE TABLE Customers (
   customer_id INT NOT NULL AUTO_INCREMENT,
   customer_name VARCHAR(215) NOT NULL,
   email VARCHAR(215),
@@ -32,18 +32,18 @@ CREATE TABLE CUSTOMERS (
 ) ENGINE=INNODB;
 
 -- ORDERS
-CREATE TABLE ORDERS (
+CREATE TABLE Orders (
   order_id INT NOT NULL AUTO_INCREMENT,
   customer_id INT NOT NULL,
   order_date DATE NOT NULL,
   PRIMARY KEY (order_id),
   CONSTRAINT fk_orders_customer
-    FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id)
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
       ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE=INNODB;
 
 -- ORDER_DETAILS
-CREATE TABLE ORDER_DETAILS (
+CREATE TABLE Order_Details (
   orderdetailid INT NOT NULL AUTO_INCREMENT,
   order_id INT NOT NULL,
   book_id INT NOT NULL,
@@ -53,12 +53,12 @@ CREATE TABLE ORDER_DETAILS (
     FOREIGN KEY (order_id) REFERENCES ORDERS(order_id)
       ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk_orderdetails_book
-    FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
+    FOREIGN KEY (book_id) REFERENCES Books(book_id)
       ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE=INNODB;
 
 -- HELPFUL INDEXES ON FOREIGN KEYS
-CREATE INDEX idx_books_author_id ON BOOKS(author_id);
-CREATE INDEX idx_orders_customer_id ON ORDERS(customer_id);
-CREATE INDEX idx_orderdetails_order_id ON ORDER_DETAILS(order_id);
-CREATE INDEX idx_orderdetails_book_id ON ORDER_DETAILS(book_id);
+CREATE INDEX idx_books_author_id ON Books(author_id);
+CREATE INDEX idx_orders_customer_id ON Orders(customer_id);
+CREATE INDEX idx_orderdetails_order_id ON Order_Details(order_id);
+CREATE INDEX idx_orderdetails_book_id ON Order_Details(book_id);
